@@ -1,4 +1,4 @@
-use crossterm::event::{KeyCode, KeyEvent, KeyModifiers, MouseButton, MouseEvent, MouseEventKind};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers, MouseEvent};
 
 use crate::app::App;
 use crate::tui;
@@ -17,10 +17,8 @@ pub fn key_listener(app: &mut App, key_event: KeyEvent) {
 }
 
 pub fn mouse_listener(app: &mut App, mouse_event: MouseEvent) {
-    if mouse_event.kind == MouseEventKind::Down(MouseButton::Left) {
-        if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
-            app.populate_board(coords.0, coords.1);
-        }
+    if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
+        app.populate_board(coords.0, coords.1);
     }
 }
 

@@ -5,7 +5,9 @@ use std::{
 };
 
 use color_eyre::Result;
-use crossterm::event::{self, Event as CrosstermEvent, KeyEvent, MouseEvent};
+use crossterm::event::{
+    self, Event as CrosstermEvent, KeyEvent, KeyEventKind, MouseButton, MouseEvent, MouseEventKind,
+};
 
 /// Terminal events.
 #[derive(Clone, Copy, Debug)]
@@ -49,20 +51,19 @@ impl EventHandler {
 
                     if event::poll(timeout).expect("unable to poll for event") {
                         match event::read().expect("unable to read event") {
-                            CrosstermEvent::Key(e) => {
-                                if e.kind == event::KeyEventKind::Press {
-                                    sender.send(Event::Key(e))
-                                } else {
-                                    Ok(())
-                                }
-                            }
-                            CrosstermEvent::Mouse(e) => {
-                                if e.kind == event::MouseEventKind::Down(event::MouseButton::Left) {
+                            CrosstermEvent::Key(e) => match e.kind {
+                                KeyEventKind::Press => sender.send(Event::Key(e)),
+                                _ => Ok(()),
+                            },
+                            CrosstermEvent::Mouse(e) => match e.kind {
+                                MouseEventKind::Down(MouseButton::Left) => {
                                     sender.send(Event::Mouse(e))
-                                } else {
-                                    Ok(())
                                 }
-                            }
+                                MouseEventKind::Drag(MouseButton::Left) => {
+                                    sender.send(Event::Mouse(e))
+                                }
+                                _ => Ok(()),
+                            },
                             CrosstermEvent::Resize(w, h) => sender.send(Event::Resize(w, h)),
                             _ => unimplemented!(),
                         }
