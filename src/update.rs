@@ -42,12 +42,6 @@ pub fn mouse_listener(app: &mut App, mouse_event: MouseEvent) {
     }
 }
 
-pub fn mouse_rightclick_listener(app: &mut App, mouse_event: MouseEvent) {
-    if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
-        app.depopulate_board(coords.0, coords.1);
-    }
-}
-
 pub fn resize_listener(app: &mut App, _c: u16, _r: u16) {
     let window_size = tui::get_size().unwrap_or((0, 0));
     app.resize_board(window_size.0, window_size.1);
