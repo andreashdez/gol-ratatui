@@ -62,6 +62,12 @@ impl EventHandler {
                                 MouseEventKind::Drag(MouseButton::Left) => {
                                     sender.send(Event::Mouse(e))
                                 }
+                                MouseEventKind::Down(MouseButton::Right) => {
+                                    sender.send(Event::Mouse(e))
+                                }
+                                MouseEventKind::Drag(MouseButton::Right) => {
+                                    sender.send(Event::Mouse(e))
+                                }
                                 _ => Ok(()),
                             },
                             CrosstermEvent::Resize(w, h) => sender.send(Event::Resize(w, h)),

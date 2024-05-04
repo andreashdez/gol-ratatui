@@ -1,4 +1,4 @@
-use crossterm::event::{KeyCode, KeyEvent, KeyModifiers, MouseEvent};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers, MouseButton, MouseEvent, MouseEventKind};
 
 use crate::app::App;
 use crate::tui;
@@ -17,8 +17,34 @@ pub fn key_listener(app: &mut App, key_event: KeyEvent) {
 }
 
 pub fn mouse_listener(app: &mut App, mouse_event: MouseEvent) {
+    match mouse_event.kind {
+        MouseEventKind::Down(MouseButton::Left) => {
+            if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
+                app.populate_board(coords.0, coords.1);
+            }
+        }
+        MouseEventKind::Drag(MouseButton::Left) => {
+            if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
+                app.populate_board(coords.0, coords.1);
+            }
+        }
+        MouseEventKind::Down(MouseButton::Right) => {
+            if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
+                app.depopulate_board(coords.0, coords.1);
+            }
+        }
+        MouseEventKind::Drag(MouseButton::Right) => {
+            if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
+                app.depopulate_board(coords.0, coords.1);
+            }
+        }
+        _ => unimplemented!(),
+    }
+}
+
+pub fn mouse_rightclick_listener(app: &mut App, mouse_event: MouseEvent) {
     if let Some(coords) = tui::get_coords(mouse_event.column, mouse_event.row) {
-        app.populate_board(coords.0, coords.1);
+        app.depopulate_board(coords.0, coords.1);
     }
 }
 

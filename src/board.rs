@@ -38,6 +38,12 @@ impl Board {
         }
     }
 
+    pub fn depopulate(&mut self, col: usize, row: usize) {
+        if col < self.cols && row < self.rows {
+            self.current[col][row] = false;
+        }
+    }
+
     pub fn populate_random(&mut self) {
         let size = self.cols * self.rows / 4;
         for _ in 0..size {

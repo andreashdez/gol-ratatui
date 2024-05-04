@@ -43,6 +43,10 @@ impl App {
         self.board.populate(col, row);
     }
 
+    pub fn depopulate_board(&mut self, col: usize, row: usize) {
+        self.board.depopulate(col, row);
+    }
+
     pub fn resize_board(&mut self, new_cols: usize, new_rows: usize) {
         self.board.resize(new_cols, new_rows);
     }
